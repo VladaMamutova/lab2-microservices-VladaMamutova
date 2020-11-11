@@ -7,5 +7,5 @@ import java.util.*
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 class UserNotFoundException(userUid: UUID) :
-        RuntimeException("User with uid = $userUid not found.") {
+        RuntimeException("User $userUid not found.") {
 }
