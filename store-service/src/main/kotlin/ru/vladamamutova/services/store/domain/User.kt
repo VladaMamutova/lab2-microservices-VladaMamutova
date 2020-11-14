@@ -19,6 +19,23 @@ class User {
     @Column(name = "user_uid", nullable = false, unique = true)
     var userUid: UUID? = null
 
+    override fun hashCode(): Int {
+        var result = 17
+        result = 31 * result + name.hashCode()
+        result = 31 * result + userUid.hashCode()
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+
+        val that: User = other as User
+
+        return Objects.equals(name, that.name) &&
+                Objects.equals(userUid, that.userUid)
+    }
+
     override fun toString(): String {
         return "User (id = $id, name = $name, userUid = $userUid)"
     }

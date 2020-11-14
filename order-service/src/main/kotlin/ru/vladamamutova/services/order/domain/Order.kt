@@ -31,7 +31,24 @@ class Order {
     var userUid: UUID? = null
 
     override fun hashCode(): Int {
-        return 0
-        //  var hashCode = 31 * hashCode + if (e == null) 0 else e.hashCode()
+        var result = 17
+        result = 31 * result + itemUid.hashCode()
+        result = 31 * result + orderUid.hashCode()
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+
+        val that: Order = other as Order
+
+        return Objects.equals(itemUid, that.itemUid) &&
+                Objects.equals(orderUid, that.orderUid)
+    }
+
+    override fun toString(): String {
+        return "Order (id = $id, userUid = $userUid, itemUid = $itemUid, " +
+                "orderUid = $orderUid, orderDate = $orderDate, status = $status)"
     }
 }
