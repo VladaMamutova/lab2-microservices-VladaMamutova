@@ -22,8 +22,10 @@
     </properties>
 
     <modules>
+        <module>warranty-api</module>
         <module>order-api</module>
         <module>store-api</module>
+        <module>warranty-service</module>
         <module>order-service</module>
         <module>store-service</module>
     </modules>

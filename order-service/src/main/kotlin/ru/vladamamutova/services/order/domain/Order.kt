@@ -1,7 +1,7 @@
 package ru.vladamamutova.services.order.domain
 
 import ru.vladamamutova.services.order.model.PaymentStatus
-import java.sql.Timestamp
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
@@ -17,14 +17,14 @@ class Order {
     @Column(name = "item_uid", nullable = false)
     var itemUid: UUID? = null
 
-    @Column(name = "order_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    var orderDate: Timestamp? = null
+    @Column(name = "order_date", columnDefinition = "TIMESTAMP", nullable = false)
+    var orderDate: LocalDateTime? = null
 
     @Column(name = "order_uid", nullable = false, unique = true)
     var orderUid: UUID? = null
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var status: PaymentStatus? = null
 
     @Column(name = "user_uid", nullable = false)
