@@ -3,10 +3,7 @@ package ru.vladamamutova.services.warranty.service
 import org.springframework.stereotype.Service
 import ru.vladamamutova.services.warranty.domain.Warranty
 import ru.vladamamutova.services.warranty.exception.WarrantyNotFoundException
-import ru.vladamamutova.services.warranty.model.ItemWarrantyRequest
-import ru.vladamamutova.services.warranty.model.OrderWarrantyResponse
-import ru.vladamamutova.services.warranty.model.WarrantyDecision
-import ru.vladamamutova.services.warranty.model.WarrantyStatus
+import ru.vladamamutova.services.warranty.model.*
 import ru.vladamamutova.services.warranty.repository.WarrantyRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -22,12 +19,21 @@ class WarrantyServiceImpl(private val warrantyRepository: WarrantyRepository) :
             .orElseThrow { throw WarrantyNotFoundException(itemUid) }
     }
 
-    override fun checkWarranty(itemUid: UUID, request: ItemWarrantyRequest
+    override fun getWarrantyInfo(itemUid: UUID): WarrantyInfoResponse {
+        val warranty = getWarrantyByItemUid(itemUid)
+        return WarrantyInfoResponse(
+                warranty.itemUid!!,
+                warranty.status.toString(),
+                warranty.warrantyDate!!.format()
+        )
+    }
+
+    override fun requestForWarrantySolution(itemUid: UUID,
+                                            request: ItemWarrantyRequest
     ): OrderWarrantyResponse {
         val warranty = getWarrantyByItemUid(itemUid)
 
         var decision = WarrantyDecision.REFUSED
-
         if (isWarrantyActive(warranty) && warranty.status == WarrantyStatus.ON_WARRANTY) {
             decision = if (request.availableCount > 0) {
                 WarrantyDecision.RETURN
@@ -44,7 +50,7 @@ class WarrantyServiceImpl(private val warrantyRepository: WarrantyRepository) :
 
         return OrderWarrantyResponse(
                 decision = decision.name,
-                warrantyDate = warranty.warrantyDate!!.toString("dd.MM.yyyy HH:mm:ss")
+                warrantyDate = warranty.warrantyDate!!.format()
         )
     }
 
@@ -62,7 +68,7 @@ class WarrantyServiceImpl(private val warrantyRepository: WarrantyRepository) :
         )
     }
 
-    fun LocalDateTime.toString(format: String): String {
-        return this.format(DateTimeFormatter.ofPattern(format))
+    private fun LocalDateTime.format(): String {
+        return this.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
     }
 }
