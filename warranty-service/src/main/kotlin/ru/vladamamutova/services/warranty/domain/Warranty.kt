@@ -5,7 +5,6 @@ import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
-
 @Entity
 @Table(name = "warranties", indexes = [
     Index(name = "idx_warranty_item_uid", columnList = "item_uid", unique = true)
@@ -50,7 +49,6 @@ class Warranty {
         this.status = status
         this.warrantyDate = warrantyDate
     }
-
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
