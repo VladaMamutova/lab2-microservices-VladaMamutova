@@ -49,8 +49,8 @@ class WarrantyServiceImpl(private val warrantyRepository: WarrantyRepository) :
         warrantyRepository.save(warranty)
 
         return OrderWarrantyResponse(
-                decision = decision.name,
-                warrantyDate = warranty.warrantyDate!!.format()
+                decision.name,
+                warranty.warrantyDate!!.format()
         )
     }
 
