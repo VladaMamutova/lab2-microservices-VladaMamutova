@@ -9,4 +9,5 @@ interface WarehouseService {
     fun getItemInfo(orderItemUid: UUID): ItemInfoResponse
     fun takeItem(request: OrderItemRequest): OrderItemResponse
     fun returnItem(orderItemUid: UUID)
+    fun getItemAvailableCount(orderItemUid: UUID): Int
 }

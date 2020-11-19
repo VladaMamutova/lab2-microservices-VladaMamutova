@@ -1,16 +1,20 @@
 package ru.vladamamutova.services.warehouse.service
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import ru.vladamamutova.services.warehouse.domain.Item
 import ru.vladamamutova.services.warehouse.domain.OrderItem
 import ru.vladamamutova.services.warehouse.exception.ItemNotAvailableException
 import ru.vladamamutova.services.warehouse.exception.ItemNotFoundException
 import ru.vladamamutova.services.warehouse.model.ItemInfoResponse
 import ru.vladamamutova.services.warehouse.model.OrderItemRequest
 import ru.vladamamutova.services.warehouse.model.OrderItemResponse
+import ru.vladamamutova.services.warehouse.model.Size
 import ru.vladamamutova.services.warehouse.repository.ItemRepository
 import ru.vladamamutova.services.warehouse.repository.OrderItemRepository
 import java.util.*
+import javax.persistence.EntityNotFoundException
 
 
 @Service
@@ -25,30 +29,38 @@ class WarehouseServiceImpl(
         private val itemRepository: ItemRepository,
         private val orderItemRepository: OrderItemRepository
 ) : WarehouseService {
+    private val logger = LoggerFactory.getLogger(WarehouseServiceImpl::class.java)
 
     override fun getItemInfo(orderItemUid: UUID): ItemInfoResponse {
         val item = itemRepository.findByOrderItemUid(orderItemUid).orElseThrow {
-            ItemNotFoundException(orderItemUid)
+            throw ItemNotFoundException(orderItemUid)
         }
 
         return ItemInfoResponse(item.model!!, item.size!!.name)
     }
 
     override fun takeItem(request: OrderItemRequest): OrderItemResponse {
+        val orderUid = request.orderUid
+        val model = request.model
+        val size = Size.valueOf(request.size)
+        logger.info("Take item (model = $model, size = $size) for order '$orderUid'")
+
         val item = itemRepository
-            .findByModelAndSize(request.model, request.size)
+            .findByModelAndSize(model, size)
             .orElseThrow {
-                ItemNotFoundException(request.model, request.size)
+                throw ItemNotFoundException(model, size)
             }
 
         if (item.availableCount > 1) {
             throw ItemNotAvailableException(item.model, item.size!!.name)
         }
 
-        itemRepository.takeOneItem(item.id!!)
-
         val orderItem = OrderItem(UUID.randomUUID(), request.orderUid, item)
         orderItemRepository.save(orderItem)
+        logger.info("Create $orderItem for order '$orderUid'")
+
+        itemRepository.takeOneItem(item.id!!)
+        logger.info("$item was taken for order '$orderUid'")
 
         return OrderItemResponse(
                 orderItem.orderItemUid!!,
@@ -61,5 +73,14 @@ class WarehouseServiceImpl(
     override fun returnItem(orderItemUid: UUID) {
         itemRepository.returnOneItem(orderItemUid)
         orderItemRepository.cancelOrderItem(orderItemUid)
+        logger.info("Item $orderItemUid was returned")
+    }
+
+    override fun getItemAvailableCount(orderItemUid: UUID): Int {
+        val item = itemRepository
+            .findByOrderItemUid(orderItemUid)
+            .orElseThrow { throw ItemNotFoundException(orderItemUid) }
+
+        return item.availableCount
     }
 }

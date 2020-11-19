@@ -11,7 +11,6 @@ interface WarrantyService {
     fun getWarrantyInfo(itemUid: UUID): WarrantyInfoResponse
     fun requestForWarrantySolution(itemUid: UUID, request: ItemWarrantyRequest
     ): OrderWarrantyResponse
-
     fun startWarranty(itemUid: UUID)
     fun closeWarranty(itemUid: UUID)
 }
