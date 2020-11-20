@@ -1,6 +1,7 @@
 package ru.vladamamutova.services.warranty.service
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.vladamamutova.services.warranty.domain.Warranty
 import ru.vladamamutova.services.warranty.exception.WarrantyNotFoundException
 import ru.vladamamutova.services.warranty.model.*
@@ -11,6 +12,7 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 @Service
+@Transactional
 class WarrantyServiceImpl(private val warrantyRepository: WarrantyRepository) :
         WarrantyService {
     override fun getWarrantyByItemUid(itemUid: UUID): Warranty {

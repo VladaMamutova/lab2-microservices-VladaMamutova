@@ -3,7 +3,6 @@ package ru.vladamamutova.services.warehouse.service
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import ru.vladamamutova.services.warehouse.domain.Item
 import ru.vladamamutova.services.warehouse.domain.OrderItem
 import ru.vladamamutova.services.warehouse.exception.ItemNotAvailableException
 import ru.vladamamutova.services.warehouse.exception.ItemNotFoundException
@@ -15,7 +14,6 @@ import ru.vladamamutova.services.warehouse.repository.ItemRepository
 import ru.vladamamutova.services.warehouse.repository.OrderItemRepository
 import java.util.*
 import javax.persistence.EntityNotFoundException
-
 
 @Service
 // The @Transactional annotation supports the following configuration:
@@ -48,10 +46,10 @@ class WarehouseServiceImpl(
         val item = itemRepository
             .findByModelAndSize(model, size)
             .orElseThrow {
-                throw ItemNotFoundException(model, size)
+                throw ItemNotFoundException(model, size.name)
             }
 
-        if (item.availableCount > 1) {
+        if (item.availableCount < 1) {
             throw ItemNotAvailableException(item.model, item.size!!.name)
         }
 

@@ -2,12 +2,14 @@ package ru.vladamamutova.services.warehouse.service
 
 import org.slf4j.LoggerFactory
 import org.springframework.http.*
+import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import ru.vladamamutova.services.warehouse.model.OrderWarrantyRequest
 import ru.vladamamutova.services.warranty.model.ItemWarrantyRequest
 import ru.vladamamutova.services.warranty.model.OrderWarrantyResponse
 import java.util.*
 
+@Service
 class WarrantyServiceImpl(private val warehouseService: WarehouseService) :
         WarrantyService {
     private val logger =
@@ -31,7 +33,7 @@ class WarrantyServiceImpl(private val warehouseService: WarehouseService) :
         )
 
         val url =
-                "http://localhost:8180/api/v1/warranty/{orderItemUid}/warranty"
+                "http://warranty-service:8180/api/v1/warranty/{orderItemUid}/warranty"
 
         val restTemplate = RestTemplate()
 

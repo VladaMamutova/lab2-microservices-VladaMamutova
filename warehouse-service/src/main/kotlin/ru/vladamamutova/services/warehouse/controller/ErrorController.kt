@@ -18,7 +18,8 @@ class ErrorController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ItemNotFoundException::class)
-    fun handleItemNotFoundException(exception: ItemNotFoundException) : ErrorResponse {
+    fun handleItemNotFoundException(exception: ItemNotFoundException
+    ): ErrorResponse {
         logger.error("Item Not Found Exception: " + exception.message)
         return ErrorResponse(
                 exception.message ?: exception.stackTrace.toString()
@@ -27,7 +28,8 @@ class ErrorController {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ItemNotAvailableException::class)
-    fun handleItemNotAvailableException(exception: ItemNotAvailableException) : ErrorResponse {
+    fun handleItemNotAvailableException(exception: ItemNotAvailableException
+    ): ErrorResponse {
         logger.error("Item Not Available Exception: " + exception.message)
         return ErrorResponse(
                 exception.message ?: exception.stackTrace.toString()
@@ -50,7 +52,7 @@ class ErrorController {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun handleAllExceptions(exception: Exception) : ErrorResponse {
+    fun handleAllExceptions(exception: Exception): ErrorResponse {
         logger.error("Unexpected exception", exception)
         return ErrorResponse(
                 exception.message ?: exception.stackTrace.toString()

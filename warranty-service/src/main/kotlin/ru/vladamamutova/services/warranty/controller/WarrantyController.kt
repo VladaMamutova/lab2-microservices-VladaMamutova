@@ -40,6 +40,6 @@ class WarrantyController(
 
     @DeleteMapping("/{itemUid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun stopWarranty(@PathVariable itemUid: UUID
-    ) = warrantyService.startWarranty(itemUid)
+    fun closeWarranty(@PathVariable itemUid: UUID
+    ) = warrantyService.closeWarranty(itemUid)
 }

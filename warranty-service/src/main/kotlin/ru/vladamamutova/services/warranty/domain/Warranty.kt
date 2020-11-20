@@ -6,7 +6,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "warranties", indexes = [
+@Table(name = "warranty", indexes = [
     Index(name = "idx_warranty_item_uid", columnList = "item_uid", unique = true)
 ])
 class Warranty {

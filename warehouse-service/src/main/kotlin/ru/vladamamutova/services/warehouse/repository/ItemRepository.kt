@@ -11,20 +11,20 @@ import java.util.*
 
 @Repository
 interface ItemRepository : CrudRepository<Item, Int> {
-    @Query("select oi.item from OrderItem oi where oi.orderItemUid =: orderItemUid")
+    @Query("select oi.item from OrderItem oi where oi.orderItemUid = :orderItemUid")
     fun findByOrderItemUid(@Param("orderItemUid") orderItemUid: UUID
     ): Optional<Item>
 
-    @Query("select oi.item from OrderItem oi where oi.model = :model and oi.size = :size")
-    // = @Query("select oi.item from OrderItem oi where oi.model = ?1 and oi.size = ?2")
+    @Query("select i from Item i where i.model = :model and i.size = :size")
+    // = @Query("select i from Item i where i.model = ?1 and i.size = ?2")
     fun findByModelAndSize(model: String, size: Size): Optional<Item>
 
     @Modifying
-    @Query("update Item i set i.available_count = i.available_count - 1 where i.id = :id")
+    @Query("update Item i set i.availableCount = i.availableCount - 1 where i.id = :id")
     fun takeOneItem(id: Int)
 
     @Modifying
-    @Query("update Item i set i.available_count = i.available_count + 1 " +
+    @Query("update Item i set i.availableCount = i.availableCount + 1 " +
                     "where i.id = (select oi.item.id from OrderItem oi where oi.orderItemUid = :orderItemUid)"
     )
     fun returnOneItem(orderItemUid: UUID)

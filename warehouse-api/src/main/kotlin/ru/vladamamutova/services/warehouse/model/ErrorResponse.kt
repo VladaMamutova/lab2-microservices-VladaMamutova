@@ -1,3 +1,3 @@
 package ru.vladamamutova.services.warehouse.model
 
-open class ErrorResponse(protected open val message: String)
+open class ErrorResponse(val message: String)
