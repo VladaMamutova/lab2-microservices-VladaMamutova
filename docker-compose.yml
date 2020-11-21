@@ -14,5 +14,23 @@ services:
     ports:
       - 5432:5432
 
+  warehouse-service:
+    build: ./warehouse-service
+    image: warehouse-service:last
+    container_name: warehouse-service
+    ports:
+      - 8280:8280
+    depends_on:
+      - postgres
+
+  warranty-service:
+    build: ./warranty-service
+    image: warranty-service:last
+    container_name: warranty-service
+    ports:
+      - 8180:8180
+    depends_on:
+      - postgres
+
 volumes:
   db-data:
