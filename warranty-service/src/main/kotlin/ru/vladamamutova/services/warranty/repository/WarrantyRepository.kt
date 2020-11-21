@@ -14,5 +14,5 @@ interface WarrantyRepository : CrudRepository<Warranty, Int> {
 
     @Modifying
     @Query("delete from Warranty w where w.itemUid = :itemUid")
-    fun deleteWarrantyByItemUid(@Param("itemUid") itemUid: UUID)
+    fun deleteWarrantyByItemUid(@Param("itemUid") itemUid: UUID): Int
 }

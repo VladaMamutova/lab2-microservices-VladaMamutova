@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.vladamamutova.services.warehouse.exception.ItemNotAvailableException
 import ru.vladamamutova.services.warehouse.exception.ItemNotFoundException
+import ru.vladamamutova.services.warehouse.exception.WarrantyProcessException
 import ru.vladamamutova.services.warehouse.model.ErrorResponse
 import ru.vladamamutova.services.warehouse.model.ErrorValidationResponse
 import java.lang.Exception
@@ -31,6 +32,16 @@ class ErrorController {
     fun handleItemNotAvailableException(exception: ItemNotAvailableException
     ): ErrorResponse {
         logger.error("Item Not Available Exception: " + exception.message)
+        return ErrorResponse(
+                exception.message ?: exception.stackTrace.toString()
+        )
+    }
+
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(WarrantyProcessException::class)
+    fun handleWarrantyProcessException(exception: WarrantyProcessException
+    ): ErrorResponse {
+        logger.error("Warranty Process Exception: " + exception.message)
         return ErrorResponse(
                 exception.message ?: exception.stackTrace.toString()
         )

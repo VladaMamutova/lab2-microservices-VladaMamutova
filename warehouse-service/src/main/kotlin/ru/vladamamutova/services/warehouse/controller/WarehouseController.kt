@@ -49,9 +49,9 @@ class WarehouseController(
         return warrantyService.requestForWarrantySolution(orderItemUid, request)
     }
 
-    @DeleteMapping("/orderItemUid")
+    @DeleteMapping("/{orderItemUid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun returnItem(orderItemUid: UUID) {
+    fun returnItem(@PathVariable orderItemUid: UUID) {
         warehouseService.returnItem(orderItemUid)
     }
 }

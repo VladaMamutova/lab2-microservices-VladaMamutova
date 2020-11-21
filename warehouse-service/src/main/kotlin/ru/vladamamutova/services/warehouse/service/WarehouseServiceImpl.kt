@@ -13,7 +13,6 @@ import ru.vladamamutova.services.warehouse.model.Size
 import ru.vladamamutova.services.warehouse.repository.ItemRepository
 import ru.vladamamutova.services.warehouse.repository.OrderItemRepository
 import java.util.*
-import javax.persistence.EntityNotFoundException
 
 @Service
 // The @Transactional annotation supports the following configuration:
