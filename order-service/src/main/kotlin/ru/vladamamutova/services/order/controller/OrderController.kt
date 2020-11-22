@@ -5,15 +5,15 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import ru.vladamamutova.services.order.model.*
+import ru.vladamamutova.services.order.service.OrderManagementService
 import ru.vladamamutova.services.order.service.OrderService
-import ru.vladamamutova.services.order.service.WarehouseService
 import java.util.*
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/v1/orders")
 class OrderController(@Autowired private val orderService: OrderService,
-                      @Autowired private val warehouseService: WarehouseService
+                      @Autowired private val orderManagementService: OrderManagementService
 ) {
     @GetMapping(
             "/{userUid}/{orderUid}",
@@ -37,7 +37,7 @@ class OrderController(@Autowired private val orderService: OrderService,
     fun makeOrder(@PathVariable userUid: UUID,
                   @Valid @RequestBody request: CreateOrderRequest
     ): CreateOrderResponse {
-        return orderService.createOrder(userUid, request)
+        return orderManagementService.makeOrder(userUid, request)
     }
 
     @PostMapping(
@@ -48,12 +48,12 @@ class OrderController(@Autowired private val orderService: OrderService,
     fun useWarranty(@PathVariable orderUid: UUID,
                     @Valid @RequestBody request: OrderWarrantyRequest
     ): OrderWarrantyResponse {
-        return warehouseService.useWarranty(orderUid, request)
+        return orderManagementService.useWarranty(orderUid, request)
     }
 
     @DeleteMapping("/{orderUid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun returnOrder(@PathVariable orderUid: UUID) {
-        orderService.returnOrder(orderUid)
+        orderManagementService.returnOrder(orderUid)
     }
 }

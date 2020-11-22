@@ -30,6 +30,38 @@ class Order {
     @Column(name = "user_uid", nullable = false)
     var userUid: UUID? = null
 
+    constructor()
+
+    constructor(itemUid: UUID?, orderUid: UUID?, userUid: UUID?)
+            : this(
+            itemUid,
+            LocalDateTime.now(),
+            orderUid,
+            PaymentStatus.PAID,
+            userUid
+    )
+
+    constructor(itemUid: UUID?, orderDate: LocalDateTime?,
+                orderUid: UUID?, status: PaymentStatus?, userUid: UUID?
+    ) {
+        this.itemUid = itemUid
+        this.orderDate = orderDate
+        this.orderUid = orderUid
+        this.status = status
+        this.userUid = userUid
+    }
+
+    constructor(id: Int?, itemUid: UUID?, orderDate: LocalDateTime?,
+                orderUid: UUID?, status: PaymentStatus?, userUid: UUID?
+    ) {
+        this.id = id
+        this.itemUid = itemUid
+        this.orderDate = orderDate
+        this.orderUid = orderUid
+        this.status = status
+        this.userUid = userUid
+    }
+
     override fun hashCode(): Int {
         var result = 17
         result = 31 * result + itemUid.hashCode()

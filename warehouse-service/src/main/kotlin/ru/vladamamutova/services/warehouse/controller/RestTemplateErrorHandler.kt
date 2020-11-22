@@ -25,7 +25,7 @@ class RestTemplateErrorHandler : ResponseErrorHandler {
         throw WarrantyProcessException(response.getResponseBodyAsString())
     }
 
-    fun ClientHttpResponse.getResponseBodyAsString(): String? {
+    fun ClientHttpResponse.getResponseBodyAsString(): String {
         val scanner = Scanner(this.body).useDelimiter("\\A")
         return if (scanner.hasNext()) scanner.next() else ""
     }

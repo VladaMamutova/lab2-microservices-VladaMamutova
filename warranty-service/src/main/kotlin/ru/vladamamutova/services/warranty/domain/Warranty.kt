@@ -35,16 +35,19 @@ class Warranty {
             LocalDateTime.now()
     )
 
-    constructor(id: Int?, comment: String?, itemUid: UUID?,
-                status: WarrantyStatus?, warrantyDate: LocalDateTime?
-    ) : this(itemUid, status, warrantyDate) {
-        this.id = id
-        this.comment = comment
-    }
-
     constructor(itemUid: UUID?, status: WarrantyStatus?,
                 warrantyDate: LocalDateTime?
     ) {
+        this.itemUid = itemUid
+        this.status = status
+        this.warrantyDate = warrantyDate
+    }
+
+    constructor(id: Int?, comment: String?, itemUid: UUID?,
+                status: WarrantyStatus?, warrantyDate: LocalDateTime?
+    ) {
+        this.id = id
+        this.comment = comment
         this.itemUid = itemUid
         this.status = status
         this.warrantyDate = warrantyDate

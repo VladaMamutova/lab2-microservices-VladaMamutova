@@ -80,7 +80,7 @@ class WarrantyServiceImpl(private val warrantyRepository: WarrantyRepository) :
     }
 
     override fun closeWarranty(itemUid: UUID) {
-        val deleted = warrantyRepository.deleteWarrantyByItemUid(itemUid)
+        val deleted = warrantyRepository.deleteByItemUid(itemUid)
         if (deleted > 1){
             logger.info("Remove warranty for item '{}'", itemUid)
         }

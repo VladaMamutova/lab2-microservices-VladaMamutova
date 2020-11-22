@@ -71,10 +71,7 @@ class WarrantyServiceImpl(
 
         // check response
         if (responseEntity.statusCode != HttpStatus.OK) {
-            throw WarrantyProcessException(
-                    "Can't process warranty request for " +
-                            "OrderItem '$orderItemUid'"
-            )
+            throw WarrantyProcessException(orderItemUid)
         } else {
             return responseEntity.body!!
         }
