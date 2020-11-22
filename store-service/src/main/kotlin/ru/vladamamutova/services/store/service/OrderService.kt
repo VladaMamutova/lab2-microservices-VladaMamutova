@@ -1,6 +1,6 @@
 package ru.vladamamutova.services.store.service
 
-import ru.vladamamutova.services.store.model.OrderResponse
+import ru.vladamamutova.services.order.model.OrderResponse
 import java.util.*
 
 interface OrderService {
