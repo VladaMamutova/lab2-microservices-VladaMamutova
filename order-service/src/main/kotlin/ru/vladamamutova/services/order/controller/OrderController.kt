@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*
 import ru.vladamamutova.services.order.model.*
 import ru.vladamamutova.services.order.service.OrderManagementService
 import ru.vladamamutova.services.order.service.OrderService
+import ru.vladamamutova.services.warehouse.model.OrderWarrantyRequest
+import ru.vladamamutova.services.warranty.model.OrderWarrantyResponse
 import java.util.*
 import javax.validation.Valid
 

@@ -38,7 +38,7 @@ class WarrantyServiceImpl(private val warrantyRepository: WarrantyRepository) :
                                             request: ItemWarrantyRequest
     ): OrderWarrantyResponse {
         logger.info(
-                "Process warranty request (reason: {}) for item '{}'",
+                "Request for warranty solution (reason: {}) for item '{}'",
                 request.reason, itemUid
         )
 
@@ -81,7 +81,7 @@ class WarrantyServiceImpl(private val warrantyRepository: WarrantyRepository) :
 
     override fun closeWarranty(itemUid: UUID) {
         val deleted = warrantyRepository.deleteByItemUid(itemUid)
-        if (deleted > 1){
+        if (deleted > 1) {
             logger.info("Remove warranty for item '{}'", itemUid)
         }
     }

@@ -12,16 +12,16 @@ import ru.vladamamutova.services.warehouse.exception.WarrantyProcessException
 import ru.vladamamutova.services.warehouse.model.ErrorResponse
 import ru.vladamamutova.services.warehouse.model.ErrorValidationResponse
 import java.lang.Exception
+import javax.persistence.EntityNotFoundException
 
 @RestControllerAdvice
 class ErrorController {
     private val logger = LoggerFactory.getLogger(ErrorController::class.java)
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ItemNotFoundException::class)
-    fun handleItemNotFoundException(exception: ItemNotFoundException
-    ): ErrorResponse {
-        logger.error("Item Not Found Exception: " + exception.message)
+    @ExceptionHandler(value = [ItemNotFoundException::class, EntityNotFoundException::class])
+    fun handleNotFoundException(exception: RuntimeException): ErrorResponse {
+        logger.error("Not Found Exception: " + exception.message)
         return ErrorResponse(
                 exception.message ?: exception.stackTrace.toString()
         )

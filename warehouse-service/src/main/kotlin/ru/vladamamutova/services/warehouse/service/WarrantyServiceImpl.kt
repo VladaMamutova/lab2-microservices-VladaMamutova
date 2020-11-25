@@ -22,23 +22,18 @@ class WarrantyServiceImpl(
         private val warehouseService: WarehouseService
 ) : WarrantyService {
     private val logger =
-            LoggerFactory.getLogger(WarehouseServiceImpl::class.java)
+            LoggerFactory.getLogger(WarrantyServiceImpl::class.java)
 
     override fun requestForWarrantySolution(orderItemUid: UUID,
                                             request: OrderWarrantyRequest
     ): OrderWarrantyResponse {
-        logger.info(
-                "Warranty request (reason: {}) on item '{}'",
-                request.reason,
-                orderItemUid
-        )
+        logger.info("Request for warranty solution (reason: ${request.reason}) " +
+                            "on item $orderItemUid")
 
         val availableCount = warehouseService.getItemAvailableCount(orderItemUid)
         val warrantyRequest = ItemWarrantyRequest(request.reason, availableCount)
-        logger.info(
-                "Request to WarrantyService to check warranty on item '{}'",
-                orderItemUid
-        )
+        logger.info("Request to WarrantyService to check warranty " +
+                            "on item $orderItemUid")
 
         val url = "$warrantyServiceUrl/api/v1/warranty/{orderItemUid}/warranty"
 

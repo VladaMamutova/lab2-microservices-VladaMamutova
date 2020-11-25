@@ -9,11 +9,11 @@ import java.util.*
 
 @Repository
 interface OrderRepository : CrudRepository<Order, Int> {
-    fun findByUserUidAndOrderUid(orderUid: UUID, userUid: UUID): Optional<Order>
+    fun findByUserUidAndOrderUid(userUid: UUID, orderUid: UUID): Optional<Order>
     fun findByUserUid(userUid: UUID): List<Order>
     fun findByOrderUid(orderUid: UUID): Optional<Order>
 
     @Modifying
     @Query("delete from Order o where o.orderUid = :orderUid")
-    fun deleteByOrderUid(orderUid: UUID)
+    fun deleteByOrderUid(orderUid: UUID): Int
 }

@@ -1,5 +1,6 @@
 package ru.vladamamutova.services.order.service
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.vladamamutova.services.order.domain.Order
@@ -14,10 +15,12 @@ import java.util.*
 @Transactional
 class OrderServiceImpl(private val orderRepository: OrderRepository) :
         OrderService {
+    private val logger = LoggerFactory.getLogger(OrderServiceImpl::class.java)
+
     override fun getUserOrder(userUid: UUID, orderUid: UUID
     ): OrderResponse {
         val order = orderRepository
-            .findByUserUidAndOrderUid(orderUid, userUid)
+            .findByUserUidAndOrderUid(userUid, orderUid)
             .orElseThrow { throw OrderNotFoundException(orderUid, userUid) }
 
         return order.toOrderResponse()
@@ -31,10 +34,14 @@ class OrderServiceImpl(private val orderRepository: OrderRepository) :
 
     override fun createOrder(itemUid: UUID, orderUid: UUID, userUid: UUID) {
         orderRepository.save(Order(itemUid, orderUid, userUid))
+        logger.info("Create order $orderUid for user $userUid and item $itemUid")
     }
 
     override fun returnOrder(orderUid: UUID) {
-        orderRepository.deleteByOrderUid(orderUid)
+        val deleted = orderRepository.deleteByOrderUid(orderUid)
+        if (deleted > 0) {
+            logger.info("Remove order $orderUid")
+        }
     }
 
     override fun getOrderByUid(orderUid: UUID): Order {
