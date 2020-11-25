@@ -5,5 +5,7 @@ import ru.vladamamutova.services.warranty.model.OrderWarrantyResponse
 import java.util.*
 
 interface WarrantyService {
-    fun requestForWarrantySolution(orderItemUid: UUID, request: OrderWarrantyRequest): OrderWarrantyResponse
+    fun requestForWarrantySolution(orderItemUid: UUID,
+                                   request: OrderWarrantyRequest
+    ): OrderWarrantyResponse
 }

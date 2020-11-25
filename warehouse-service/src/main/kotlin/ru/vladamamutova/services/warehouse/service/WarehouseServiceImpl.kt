@@ -49,7 +49,7 @@ class WarehouseServiceImpl(
             }
 
         if (item.availableCount < 1) {
-            throw ItemNotAvailableException(item.model, item.size!!.name)
+            throw ItemNotAvailableException(item.model!!, item.size!!.name)
         }
 
         val orderItem = OrderItem(UUID.randomUUID(), request.orderUid, item)
