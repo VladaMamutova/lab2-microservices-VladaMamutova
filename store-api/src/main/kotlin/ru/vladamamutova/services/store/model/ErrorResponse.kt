@@ -1,5 +1,3 @@
 package ru.vladamamutova.services.store.model
 
-class PurchaseRequest {
-
-}
+open class ErrorResponse(val message: String)

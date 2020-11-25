@@ -1,5 +1,3 @@
 package ru.vladamamutova.services.store.model
 
-class WarrantyResponse {
-
-}
+class WarrantyRequest(val reason: String)
