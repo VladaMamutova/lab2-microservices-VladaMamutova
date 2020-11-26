@@ -6,6 +6,6 @@ import ru.vladamamutova.services.store.domain.User
 import java.util.*
 
 @Repository
-interface UserRepository: CrudRepository<UserRepository, Int> {
+interface UserRepository: CrudRepository<User, Int> {
     fun findByUserUid(userUid: UUID): Optional<User>
 }

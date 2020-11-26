@@ -3,8 +3,8 @@ package ru.vladamamutova.services.store.model
 import java.util.*
 
 class UserOrderResponse(
-        var date: String,
         var orderUid: UUID,
+        var date: String,
         var model: String? = null,
         var size: Size? = null,
         var warrantyDate: String? = null,

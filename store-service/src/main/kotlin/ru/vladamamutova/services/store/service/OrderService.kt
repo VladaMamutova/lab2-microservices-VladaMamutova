@@ -4,6 +4,6 @@ import ru.vladamamutova.services.order.model.OrderResponse
 import java.util.*
 
 interface OrderService {
-    fun getOrders(userUid: UUID): Optional<List<OrderResponse>>
-    fun getOrderById(userUid: UUID): Optional<OrderResponse>
+    fun getUserOrder(userUid: UUID, orderUid: UUID): Optional<OrderResponse>
+    fun getUserOrders(userUid: UUID): Optional<List<OrderResponse>>
 }

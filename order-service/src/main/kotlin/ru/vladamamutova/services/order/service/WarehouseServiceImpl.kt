@@ -1,5 +1,6 @@
 package ru.vladamamutova.services.order.service
 
+import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
 import org.springframework.stereotype.Service
@@ -7,6 +8,7 @@ import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import ru.vladamamutova.services.order.controller.RestTemplateErrorHandler
 import ru.vladamamutova.services.order.exception.WarehouseProcessException
+import ru.vladamamutova.services.order.model.ErrorResponse
 import ru.vladamamutova.services.order.model.Size
 import ru.vladamamutova.services.warehouse.model.OrderItemRequest
 import ru.vladamamutova.services.warehouse.model.OrderItemResponse
@@ -90,7 +92,11 @@ class WarehouseServiceImpl(
             val restTemplate = RestTemplate()
             restTemplate.delete(url, itemUid)
         } catch (ex: HttpStatusCodeException) {
-            throw WarehouseProcessException(ex.responseBodyAsString)
+            throw WarehouseProcessException(ex.extractMessage())
         }
+    }
+
+    fun HttpStatusCodeException.extractMessage(): String {
+        return Gson().fromJson(this.responseBodyAsString, ErrorResponse::class.java).message
     }
 }
