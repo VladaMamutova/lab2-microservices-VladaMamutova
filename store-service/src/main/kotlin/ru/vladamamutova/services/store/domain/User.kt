@@ -19,6 +19,8 @@ class User {
     @Column(name = "user_uid", nullable = false, unique = true)
     var userUid: UUID? = null
 
+    constructor()
+
     override fun hashCode(): Int {
         var result = 17
         result = 31 * result + name.hashCode()

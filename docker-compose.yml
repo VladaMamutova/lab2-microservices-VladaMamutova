@@ -14,6 +14,15 @@ services:
     ports:
       - 5432:5432
 
+  store-service:
+    build: ./store-service
+    image: store-service:last
+    container_name: store-service
+    ports:
+      - 8480:8480
+    depends_on:
+      - postgres
+
   order-service:
     build: ./order-service
     image: order-service:last
