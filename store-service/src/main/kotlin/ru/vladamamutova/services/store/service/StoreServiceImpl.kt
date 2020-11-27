@@ -3,8 +3,11 @@ package ru.vladamamutova.services.store.service
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import ru.vladamamutova.services.store.exception.OrderNotFoundException
+import ru.vladamamutova.services.store.exception.OrderProcessException
 import ru.vladamamutova.services.store.exception.UserNotFoundException
+import ru.vladamamutova.services.store.exception.WarrantyProcessException
 import ru.vladamamutova.services.store.model.*
+import ru.vladamamutova.services.warranty.model.OrderWarrantyResponse
 import java.util.*
 
 @Service
@@ -17,6 +20,7 @@ class StoreServiceImpl(
     private val logger = LoggerFactory.getLogger(StoreServiceImpl::class.java)
 
     override fun getUserOrders(userUid: UUID): List<UserOrderResponse> {
+        logger.info("Get user $userUid orders")
         if (!userService.existById(userUid)) {
             throw UserNotFoundException(userUid)
         }
@@ -59,6 +63,7 @@ class StoreServiceImpl(
 
     override fun getUserOrderById(userUid: UUID, orderUid: UUID
     ): UserOrderResponse {
+        logger.info("Get user $userUid order $orderUid")
         if (!userService.existById(userUid)) {
             throw UserNotFoundException(userUid)
         }
@@ -92,15 +97,47 @@ class StoreServiceImpl(
     override fun requestWarranty(userUid: UUID, orderUid: UUID,
                                  request: WarrantyRequest
     ): WarrantyResponse {
-        TODO("Not yet implemented")
+        logger.info(
+                "Request warranty for order $orderUid (reason: ${request.reason}) " +
+                        "by user $userUid"
+        )
+        if (!userService.existById(userUid)) {
+            throw UserNotFoundException(userUid)
+        }
+
+        logger.info("Request to Order Service to use warranty for order $orderUid")
+        val response: OrderWarrantyResponse = orderService
+            .useWarranty(orderUid, request)
+            .orElseThrow { throw WarrantyProcessException(orderUid) }
+
+        return WarrantyResponse(
+                orderUid,
+                response.decision,
+                response.warrantyDate
+        )
     }
 
-    override fun makePurchase(userUid: UUID, purchaseRequest: PurchaseRequest
+    override fun makePurchase(userUid: UUID, request: PurchaseRequest
     ): UUID {
-        TODO("Not yet implemented")
+        logger.info("Make purchase (model: ${request.model}, " +
+                            "size: ${request.size}) for user $userUid")
+        if (!userService.existById(userUid)) {
+            throw UserNotFoundException(userUid)
+        }
+
+        logger.info("Request to Order Service to make order for user $userUid")
+        return orderService
+            .makeOrder(userUid, request)
+            .orElseThrow { throw OrderProcessException(userUid) }.orderUid
     }
 
     override fun refundPurchase(userUid: UUID, orderUid: UUID) {
-        TODO("Not yet implemented")
+        logger.info("Return user $userUid order $orderUid")
+        if (!userService.existById(userUid)) {
+            throw UserNotFoundException(userUid)
+        }
+
+        logger.info("Request to Order Service to return order $orderUid")
+        orderService.returnOrder(orderUid)
     }
 }
