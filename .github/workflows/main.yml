@@ -12,8 +12,61 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # TODO Build projects
-      # TODO deploy to Heroku
+        
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      
+      - name: Build and test with Maven
+        run: mvn -B package --file pom.xml
+        
+      - name: Deploy Warranty Service
+        uses: AkhileshNS/heroku-deploy@v3.5.6
+        with:
+          heroku_api_key: 87d4ce2e-ef40-4f3f-8f36-1d0981ae8759
+          heroku_app_name: "mamutova-warranty-service"
+          heroku_email: "vlada.mamutova@gmail.com"
+          # Will deploy using Dockerfile in project root
+          usedocker: true
+          # Set if your app is located in a subdirectory
+          appdir: warranty-service
+        
+      - name: Deploy Warahouse Service
+        uses: AkhileshNS/heroku-deploy@v3.5.6
+        with:
+          heroku_api_key: 87d4ce2e-ef40-4f3f-8f36-1d0981ae8759
+          heroku_app_name: "mamutova-warehouse-service"
+          heroku_email: "vlada.mamutova@gmail.com"
+          usedocker: true
+          appdir: warehouse-service
+      
+      - name: Deploy Order Service
+        uses: AkhileshNS/heroku-deploy@v3.5.6
+        with:
+          heroku_api_key: 87d4ce2e-ef40-4f3f-8f36-1d0981ae8759
+          heroku_app_name: "mamutova-order-service"
+          heroku_email: "vlada.mamutova@gmail.com"
+          usedocker: true
+          appdir: order-service
+      
+      - name: Deploy Store Service
+        uses: AkhileshNS/heroku-deploy@v3.5.6
+        with:
+          heroku_api_key: 87d4ce2e-ef40-4f3f-8f36-1d0981ae8759
+          heroku_app_name: "mamutova-store-service"
+          heroku_email: "vlada.mamutova@gmail.com"
+          usedocker: true
+          appdir: store-service
+     
       - name: Run API Tests
         id: run-newman
         uses: anthonyvscode/newman-action@v1
