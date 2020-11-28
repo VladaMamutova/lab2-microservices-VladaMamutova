@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
 jobs:
   build:
     name: Build
@@ -35,9 +32,7 @@ jobs:
           heroku_api_key: 87d4ce2e-ef40-4f3f-8f36-1d0981ae8759
           heroku_app_name: "mamutova-warranty-service"
           heroku_email: "vlada.mamutova@gmail.com"
-          # Will deploy using Dockerfile in project root
           usedocker: true
-          # Set if your app is located in a subdirectory
           appdir: warranty-service
         
       - name: Deploy Warahouse Service
